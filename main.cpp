@@ -4,9 +4,9 @@
 
 typedef struct ACANE_DICTIONARY {
     int id;
-    const char* src;
-    const char* dst;
-    const char* code;
+    std::string src;
+    std::string dst;
+    std::string code;
     int enabled;
 } ac_dictionary_t;
 
@@ -21,9 +21,15 @@ END_DEFINE_BEAN_ADAPTER(ac_dictionary_t)
 int main() {
     ac_dictionary_t dict;
     DatabaseConnection db("test.sqlite");
-    ITable<ac_dictionary_t_adapter_t> DAO;
+    ITable<ac_dictionary_tAdapter> DAO;
     DAO.take_connection(&db);
-    DAO.get_by_id(16, &dict);
+    dict.id = 12;
     dict.src = "Acane";
-    DAO.update(dict);
+    dict.dst = "Test";
+    // DAO.insert(dict);
+    std::vector<ac_dictionary_t> list;
+    DAO.get_by_cond(list, "1 = 1");
+    for (auto& dict: list) {
+      printf("%d %s %s\n", dict.id, dict.dst.c_str(), dict.src.c_str());
+    }
 }
